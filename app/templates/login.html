@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Login · Firma Muni{% endblock %}
+
+{% block content %}
+  <div class="card card-narrow">
+    <h1 class="h1">Ingresar</h1>
+    <p class="muted">Usa tu usuario. (Admin inicial: <b>admin@municunco.local</b>)</p>
+
+    <form method="post" action="{{ url_for('auth.login_post') }}" class="form">
+      <label class="label">Correo</label>
+      <input class="input" type="email" name="email" required autocomplete="username" />
+
+      <label class="label">Contraseña</label>
+      <input class="input" type="password" name="password" required autocomplete="current-password" />
+
+      <button class="btn primary" type="submit">Entrar</button>
+    </form>
+
+    <div class="hint">
+      <b>Importante:</b> cambia la clave del admin al primer ingreso (lo haremos en fase 2).
+    </div>
+  </div>
+{% endblock %}

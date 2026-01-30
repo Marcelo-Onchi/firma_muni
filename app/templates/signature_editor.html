@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% block title %}Editor · Firma Muni{% endblock %}
+
+{% block content %}
+  <div class="row space-between">
+    <div>
+      <h1 class="h1">{{ "Editar firma" if firma else "Nueva firma" }}</h1>
+      <p class="muted">Completa los datos y revisa la vista previa tipo Gmail.</p>
+    </div>
+    <div>
+      <a class="btn" href="{{ url_for('sig.listar_firmas') }}">← Volver</a>
+    </div>
+  </div>
+
+  <div class="editor">
+    <div class="card">
+      <form method="post" enctype="multipart/form-data"
+            action="{% if firma %}{{ url_for('sig.editar_firma_post', firma_id=firma.id) }}{% else %}{{ url_for('sig.nueva_firma_post') }}{% endif %}">
+        <div class="form-grid">
+          <div>
+            <label class="label">Nombre *</label>
+            <input class="input" name="nombre" required value="{{ firma.nombre if firma else '' }}" data-bind="nombre" />
+          </div>
+
+          <div>
+            <label class="label">Cargo</label>
+            <input class="input" name="cargo" value="{{ firma.cargo if firma else '' }}" data-bind="cargo" />
+          </div>
+
+          <div>
+            <label class="label">Unidad / Departamento</label>
+            <input class="input" name="unidad" value="{{ firma.unidad if firma else '' }}" data-bind="unidad" />
+          </div>
+
+          <div>
+            <label class="label">Teléfono</label>
+            <input class="input" name="telefono" value="{{ firma.telefono if firma else '' }}" data-bind="telefono" />
+          </div>
+
+          <div>
+            <label class="label">Correo</label>
+            <input class="input" name="correo" value="{{ firma.correo if firma else '' }}" data-bind="correo" />
+          </div>
+
+          <div>
+            <label class="label">Web</label>
+            <input class="input" name="web" value="{{ firma.web if firma else '' }}" data-bind="web" />
+          </div>
+
+          <div>
+            <label class="label">Color base</label>
+            <input class="input" type="color" name="color_base"
+                   value="{{ firma.color_base if firma else default_color }}" data-bind="color" />
+          </div>
+
+          <div>
+            <label class="label">Plantilla</label>
+            <select class="input" name="plantilla" data-bind="plantilla">
+              {% set tpl = (firma.plantilla if firma else default_template) %}
+              <option value="clasica" {{ "selected" if tpl == "clasica" else "" }}>Clásica</option>
+              <option value="compacta" {{ "selected" if tpl == "compacta" else "" }}>Compacta</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="label">Logo (PNG/JPG)</label>
+            <input class="input" type="file" name="logo" accept="image/*" />
+            {% if firma and firma.logo_path %}
+              <div class="muted small">Actual: {{ firma.logo_path }}</div>
+            {% endif %}
+          </div>
+
+          <div>
+            <label class="label">Firma manuscrita (PNG ideal)</label>
+            <input class="input" type="file" name="firma_img" accept="image/*" />
+            {% if firma and firma.firma_path %}
+              <div class="muted small">Actual: {{ firma.firma_path }}</div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn primary" type="submit">
+            {{ "Guardar cambios" if firma else "Crear firma" }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Preview -->
+    <div class="card">
+      <div class="row space-between">
+        <div>
+          <div class="title">Vista previa</div>
+          <div class="muted small">Esto simula cómo se verá en un correo (estilo Gmail).</div>
+        </div>
+        <span class="pill ok">LIVE</span>
+      </div>
+
+      <div id="preview" class="preview" style="--brand: {{ firma.color_base if firma else default_color }};">
+        <div class="sig">
+          <div class="sig-left">
+            <div class="logo-box">LOGO</div>
+          </div>
+          <div class="sig-right">
+            <div class="sig-name" id="pv-nombre">{{ firma.nombre if firma else "Nombre Apellido" }}</div>
+            <div class="sig-line" id="pv-cargo">{{ firma.cargo if firma and firma.cargo else "Cargo" }}</div>
+            <div class="sig-line" id="pv-unidad">{{ firma.unidad if firma and firma.unidad else "Unidad / Departamento" }}</div>
+            <div class="sig-line">
+              <span id="pv-telefono">{{ firma.telefono if firma and firma.telefono else "Teléfono" }}</span>
+              <span class="dot">·</span>
+              <span id="pv-correo">{{ firma.correo if firma and firma.correo else "correo@municunco.cl" }}</span>
+            </div>
+            <div class="sig-line" id="pv-web">{{ firma.web if firma and firma.web else "www.municunco.cl" }}</div>
+          </div>
+        </div>
+        <div class="sig-sign">
+          <div class="sign-box">FIRMA</div>
+        </div>
+      </div>
+
+      <div class="hint">
+        Export HTML/PNG viene en la parte 3 (queda con botones de descarga).
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Preview simple: “bind” inputs a texto
+  const binds = document.querySelectorAll("[data-bind]");
+  const map = {
+    nombre: document.getElementById("pv-nombre"),
+    cargo: document.getElementById("pv-cargo"),
+    unidad: document.getElementById("pv-unidad"),
+    telefono: document.getElementById("pv-telefono"),
+    correo: document.getElementById("pv-correo"),
+    web: document.getElementById("pv-web"),
+  };
+
+  function safeText(v, fallback) {
+    v = (v || "").trim();
+    return v ? v : fallback;
+  }
+
+  binds.forEach(el => {
+    el.addEventListener("input", () => {
+      const key = el.getAttribute("data-bind");
+
+      if (key === "color") {
+        document.getElementById("preview").style.setProperty("--brand", el.value || "#1f4e79");
+        return;
+      }
+      if (map[key]) {
+        const fallback = map[key].dataset.fallback || map[key].textContent;
+        map[key].textContent = safeText(el.value, fallback);
+      }
+    });
+  });
+</script>
+{% endblock %}

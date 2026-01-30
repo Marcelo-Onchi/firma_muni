@@ -1,0 +1,129 @@
+:root{
+  --bg:#0f172a;
+  --panel:#0b1224;
+  --card:#0c1a33;
+  --text:#e5e7eb;
+  --muted:#9ca3af;
+  --line:rgba(255,255,255,.08);
+  --primary:#1f4e79;
+  --danger:#b91c1c;
+  --ok:#16a34a;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: linear-gradient(180deg, var(--bg), #0b1020 60%);
+  color:var(--text);
+}
+a{color:inherit; text-decoration:none}
+.wrap{max-width:1080px; margin:0 auto; padding:18px}
+.topbar{position:sticky; top:0; background:rgba(10,16,32,.8); backdrop-filter: blur(10px); border-bottom:1px solid var(--line)}
+.topbar-row{display:flex; align-items:center; justify-content:space-between}
+.brand{display:flex; align-items:center; gap:10px}
+.brand-dot{width:10px; height:10px; border-radius:999px; background:var(--primary); box-shadow:0 0 0 4px rgba(31,78,121,.2)}
+.topnav{display:flex; gap:14px}
+.topnav a{opacity:.9}
+.topnav a:hover{opacity:1}
+
+.footer{border-top:1px solid var(--line); margin-top:24px}
+.footer-row{opacity:.8; font-size:.9rem}
+
+.h1{margin:0 0 6px; font-size:1.35rem}
+.muted{color:var(--muted)}
+.small{font-size:.9rem}
+
+.card{
+  background: rgba(12,26,51,.75);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.25);
+}
+.card-narrow{max-width:520px; margin:22px auto}
+
+.row{display:flex; align-items:flex-start; gap:14px}
+.space-between{justify-content:space-between}
+.grid{display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:14px}
+@media (max-width: 860px){
+  .grid{grid-template-columns: 1fr}
+}
+
+.form{display:flex; flex-direction:column; gap:10px; margin-top:10px}
+.form-grid{display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:12px}
+@media (max-width: 860px){
+  .form-grid{grid-template-columns:1fr}
+}
+.label{font-size:.9rem; color:var(--muted)}
+.input{
+  width:100%;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background: rgba(0,0,0,.15);
+  color:var(--text);
+  outline:none;
+}
+.input:focus{border-color: rgba(31,78,121,.6)}
+.actions{display:flex; gap:10px; margin-top:14px}
+
+.btn{
+  border:1px solid var(--line);
+  background: rgba(0,0,0,.15);
+  padding:10px 12px;
+  border-radius:12px;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+.btn:hover{border-color: rgba(255,255,255,.18)}
+.btn.primary{background: rgba(31,78,121,.35); border-color: rgba(31,78,121,.6)}
+.btn.danger{background: rgba(185,28,28,.25); border-color: rgba(185,28,28,.55)}
+
+.pill{
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  font-size:.85rem;
+  opacity:.95;
+}
+.pill.ok{border-color: rgba(22,163,74,.5); background: rgba(22,163,74,.15)}
+.pill.off{border-color: rgba(156,163,175,.35); background: rgba(156,163,175,.08)}
+
+.flash-stack{display:flex; flex-direction:column; gap:8px; margin:10px 0 16px}
+.flash{padding:10px 12px; border-radius:12px; border:1px solid var(--line)}
+.flash-success{background: rgba(22,163,74,.14); border-color: rgba(22,163,74,.35)}
+.flash-danger{background: rgba(185,28,28,.14); border-color: rgba(185,28,28,.35)}
+
+.editor{display:grid; grid-template-columns: 1fr 1fr; gap:14px; margin-top:14px}
+@media (max-width: 980px){
+  .editor{grid-template-columns: 1fr}
+}
+
+.title{font-weight:800; font-size:1.05rem}
+.hint{margin-top:12px; padding:12px; border-radius:12px; border:1px dashed rgba(255,255,255,.18); color:var(--muted)}
+
+/* Preview signature */
+.preview{margin-top:14px; padding:14px; border-radius:14px; border:1px solid var(--line); background: rgba(0,0,0,.15); --brand: var(--primary)}
+.sig{display:flex; gap:14px; align-items:flex-start}
+.logo-box{
+  width:86px; height:86px; border-radius:12px;
+  border:1px solid rgba(255,255,255,.14);
+  display:flex; align-items:center; justify-content:center;
+  font-weight:800; opacity:.85;
+}
+.sig-right{flex:1}
+.sig-name{font-weight:900; font-size:1.05rem; color: #fff}
+.sig-line{margin-top:4px; color:rgba(229,231,235,.92)}
+.sig-line .dot{margin:0 8px; opacity:.6}
+.sig-sign{margin-top:10px}
+.sign-box{
+  width:220px; height:70px; border-radius:12px;
+  border:1px solid rgba(255,255,255,.14);
+  display:flex; align-items:center; justify-content:center;
+  font-weight:800; opacity:.75;
+  color: var(--brand);
+}

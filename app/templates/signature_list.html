@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Mis firmas · Firma Muni{% endblock %}
+
+{% block content %}
+  <div class="row space-between">
+    <div>
+      <h1 class="h1">Mis firmas</h1>
+      <p class="muted">Crea y administra firmas estilo Gmail, listas para exportar.</p>
+    </div>
+    <div>
+      <a class="btn primary" href="{{ url_for('sig.nueva_firma') }}">+ Nueva firma</a>
+    </div>
+  </div>
+
+  {% if not firmas %}
+    <div class="card">
+      <p>No tienes firmas aún.</p>
+      <a class="btn" href="{{ url_for('sig.nueva_firma') }}">Crear mi primera firma</a>
+    </div>
+  {% else %}
+    <div class="grid">
+      {% for f in firmas %}
+        <div class="card">
+          <div class="row space-between">
+            <div>
+              <div class="title">{{ f.nombre }}</div>
+              <div class="muted small">
+                {{ f.cargo or "—" }} · {{ f.unidad or "—" }}
+              </div>
+            </div>
+            <span class="pill {{ 'ok' if f.is_active else 'off' }}">
+              {{ 'Activa' if f.is_active else 'Inactiva' }}
+            </span>
+          </div>
+
+          <div class="actions">
+            <a class="btn" href="{{ url_for('sig.editar_firma', firma_id=f.id) }}">Editar</a>
+            <form method="post" action="{{ url_for('sig.toggle_firma', firma_id=f.id) }}">
+              <button class="btn danger" type="submit">
+                {{ 'Desactivar' if f.is_active else 'Activar' }}
+              </button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endblock %}
